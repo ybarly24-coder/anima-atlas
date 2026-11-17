@@ -1,0 +1,63 @@
+name: Deploy to GitHub Pages
+
+# Builds the static (GitHub Pages) version of ANIMA ATLAS and publishes it.
+# Required repository secret: APP_PIN (4 digits) - Settings > Secrets and variables > Actions.
+# No TMDB or Anthropic key is used here: on GitHub Pages each device enters its own TMDB key in the app.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Work out the site path
+        id: base
+        run: |
+          repo="${{ github.event.repository.name }}"
+          # <user>.github.io repositories are served at the domain root; others at /<repo>/.
+          if [[ "$repo" == *.github.io ]]; then echo "path=" >> "$GITHUB_OUTPUT"; else echo "path=/$repo" >> "$GITHUB_OUTPUT"; fi
+
+      - name: Build static site
+        env:
+          APP_PIN: ${{ secrets.APP_PIN }}
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.base.outputs.path }}
+          NEXT_TELEMETRY_DISABLED: '1'
+        run: npm run build:pages
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

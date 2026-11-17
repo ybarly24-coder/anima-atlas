@@ -1,0 +1,90 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-paper: #f7f4ee;
+  --color-paper-2: #efeae1;
+  --color-card: #fffdf9;
+  --color-ink: #24221f;
+  --color-ink-2: #4a4641;
+  --color-muted: #7a746c;
+  --color-line: #e2dcd2;
+  --color-line-2: #cfc7bb;
+  --color-fact: #2f5d50;
+  --color-fact-bg: #e7f0ec;
+  --color-hypo: #8a5a12;
+  --color-hypo-bg: #f8eedb;
+  --color-obs: #3d4f7a;
+  --color-obs-bg: #e8ecf5;
+  --color-danger: #a03a2c;
+  --font-sans: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Iowan Old Style', 'Noto Serif KR', 'Apple Myungjo', Georgia, serif;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.placeholder-art {
+  position: relative;
+  overflow: hidden;
+}
+
+.placeholder-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.09) 0 2px, transparent 2px 9px);
+  pointer-events: none;
+}
+
+.prose-note {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes pinshake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+/* iOS Safari zooms the page when focusing a field whose font is under 16px. Keep fields at 16px on phones. */
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Smoother momentum scrolling and no grey tap flash on iPhone. */
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}

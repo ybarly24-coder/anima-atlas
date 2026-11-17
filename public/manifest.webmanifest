@@ -1,0 +1,11 @@
+{
+  "name": "ANIMA ATLAS",
+  "short_name": "ANIMA ATLAS",
+  "description": "Animation Research & Visual Intelligence Platform",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f4ee",
+  "theme_color": "#f7f4ee",
+  "lang": "ko"
+}
